@@ -34,6 +34,9 @@ const addProduct = async (req, res) => {
   ) {
     return res.status(401).send("Provide all fields");
   }
+  if (Object.keys(sizes).length === 0) {
+    return res.status(401).send("At least one size required");
+  }
   console.log(req.body);
   try {
     const thumbnail = (await uploadOnCloudnary(req.files.thumbnail))[0];
@@ -100,9 +103,12 @@ const updateOrderStatus = async (req, res) => {
     if ((!orderId, !status)) {
       return res.status(401).send("OrderId and status required");
     }
-    const order = await orderModel.findOneAndUpdate(new mongoose.Types.ObjectId(orderId), {
-      $set: { status: status },
-    });
+    const order = await orderModel.findOneAndUpdate(
+      new mongoose.Types.ObjectId(orderId),
+      {
+        $set: { status: status },
+      }
+    );
 
     if (!order) {
       return res.status(400).send("Unable to update status");
@@ -114,4 +120,79 @@ const updateOrderStatus = async (req, res) => {
   }
 };
 
-module.exports = { addProduct, getAllProducts, removeProduct, updateOrderStatus };
+const updateProduct = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    
+    const productDetails = req.body;
+    const product = await productModel.findByIdAndUpdate(productId, {
+      ...productDetails,
+    });
+    if (product) {
+      return res.status(200).send(product);
+    }
+    return res.status(400).send("Unable to update product");
+  } catch (error) {
+    console.log(error);
+    return res.status(502).send("Internal server error");
+  }
+};
+const fetchOrdersSeller = async (req, res) => {
+  try {
+    console.log("Seller Fetch order run")
+    const user_id = req.id;
+    
+    const orders = await orderModel.aggregate([
+      {
+        $match: { seller: new mongoose.Types.ObjectId(user_id) },
+      },
+      {
+        $lookup: {
+          from: "productmodels",
+          foreignField: "_id",
+          localField: "product",
+          as: "product",
+        },
+      },
+      {
+        $unwind: "$product",
+      },
+      {
+        $lookup: {
+          from: "usermodels",
+          foreignField: "_id",
+          localField: "buyer",
+          as: "buyer",
+        },
+      },
+      {
+        $unwind: "$buyer",
+      },
+
+      {
+        $lookup: {
+          from: "usermodels",
+          foreignField: "_id",
+          localField: "seller",
+          as: "seller",
+        },
+      },
+      {
+        $unwind: "$seller",
+      },
+    ]);
+    
+    return res.status(200).send(orders);
+  } catch (error) {
+    console.log(error);
+    return res.status(502).send("Internal server error");
+  }
+};
+module.exports = {
+  addProduct,
+  getAllProducts,
+  removeProduct,
+  updateOrderStatus,
+  updateProduct,
+  fetchOrdersSeller
+};

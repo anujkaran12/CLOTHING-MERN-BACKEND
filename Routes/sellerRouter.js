@@ -5,9 +5,11 @@ const {
   removeProduct,
   getAllProducts,
   updateOrderStatus,
+  updateProduct,
+  fetchOrdersSeller,
 } = require("../Controller/sellerController");
 const { sellerValidator } = require("../Validator/sellerValidator");
-const { fetchOrders } = require("../Controller/orderController");
+
 const sellerRouter = express.Router();
 
 const path = require("path");
@@ -41,7 +43,9 @@ sellerRouter.post(
 sellerRouter.delete("/removeProduct", removeProduct);
 sellerRouter.get("/getAllProducts", getAllProducts);
 
-sellerRouter.get("/orders", fetchOrders);
+sellerRouter.get("/orders", fetchOrdersSeller);
 sellerRouter.put("/orders", updateOrderStatus);
+
+sellerRouter.post('/updateProduct/:productId',updateProduct)
 
 module.exports = { sellerRouter };

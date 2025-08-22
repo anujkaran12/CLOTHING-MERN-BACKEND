@@ -9,6 +9,7 @@ const {
   addToCart,
   removeFromCart,
   fetchCart,
+  checkCartAvailability,
 } = require("../Controller/cartController");
 const { placeOrder, fetchOrders } = require("../Controller/orderController");
 const multer = require("multer");
@@ -42,6 +43,7 @@ userRouter.post(
 
 userRouter.get("/cart", fetchCart);
 userRouter.post("/cart", addToCart);
+userRouter.post("/cart/check",checkCartAvailability)
 userRouter.delete("/cart", removeFromCart);
 
 userRouter.get("/wishlist", fetchWishlist);

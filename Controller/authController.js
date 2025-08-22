@@ -57,6 +57,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+    
     if (!email || !password) {
       return res.status(400).send("Please fill in all fields");
     }
@@ -64,6 +65,9 @@ const login = async (req, res) => {
     const user = await userModel.findOne({ email: email });
 
     if (!user) {
+      return res.status(400).send("Email & Password not matched");
+    }
+    if (!user.password) {
       return res.status(400).send("Email & Password not matched");
     }
     const match = await bcrypt.compare(password.toString(), user.password);
@@ -228,8 +232,12 @@ const resetPassword = async (req, res) => {
     user.resetPasswordExpiresAt = null;
     user.resetPasswordTokenHash = null;
     //now saving the user in db
-    await user.save();
-    return res.status(200).send("Password reset successful");
+    const savePass = await user.save();
+    if(savePass){
+      return res.status(200).send("Password reset successful");
+
+    }
+    return res.status(400).send("unable to reset password");
   } catch (error) {
     console.log(error);
     return res.status(502).send("Internal server error");

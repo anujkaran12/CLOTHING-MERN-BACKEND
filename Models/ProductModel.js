@@ -53,8 +53,9 @@ const productSchema = mongose.Schema(
       },
     ],
     sizes: {
-      type: Object,
-      require: true,
+      type: Map,
+      of: Number,
+      default: {},
     },
     color: {
       type: String,

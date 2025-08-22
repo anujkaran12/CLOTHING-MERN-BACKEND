@@ -25,7 +25,7 @@ const uploadOnCloudnary = async (imgArray) => {
     });
 
     //now unlik the images from local upload folder
-    console.log("Fileurls - >", fileUrls);
+    
     imgArray.forEach((img) => {
       fs.unlinkSync(img.path);
     });

@@ -45,7 +45,6 @@ const userSchema = new mongose.Schema(
         },
         size: {
           type: String,
-          lowercase: true,
           trim: true,
         },
       },
