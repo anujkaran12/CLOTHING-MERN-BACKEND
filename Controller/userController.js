@@ -80,7 +80,7 @@ const updateProfile = async (req, res) => {
     console.log("address - ", address);
     console.log("Mobile - ", mobile);
 
-    let avatar = req.files?.avatar;
+    let avatar = req.file;
 
     let user = await userModel.findById(user_id);
     if (avatar) {

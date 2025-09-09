@@ -8,34 +8,32 @@ v2.config({
 
 const uploadOnCloudnary = async (imgArray) => {
   try {
-    if (!imgArray) {
-      return null;
-    }
-    //get all files in promises | didn't use await
+    if (!imgArray) return null;
 
-    const uploadPromises = imgArray.map((img, i) =>
-      v2.uploader.upload(img.path)
-    );
+    // ensure imgArray is always an array (single upload can also be passed)
+    if (!Array.isArray(imgArray)) imgArray = [imgArray];
+
+    const uploadPromises = imgArray.map((img) => {
+      return new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          
+          (error, result) => {
+            if (result) resolve({
+              secure_url: result.secure_url,
+              public_id: result.public_id
+            });
+            else reject(error);
+          }
+        );
+        // Pipe the buffer into Cloudinary stream
+        streamifier.createReadStream(img.buffer).pipe(uploadStream);
+      });
+    });
+
     const result = await Promise.all(uploadPromises);
-    const fileUrls = result.map((uploadedImage) => {
-      return {
-        secure_url: uploadedImage.secure_url,
-        public_id: uploadedImage.public_id,
-      };
-    });
-
-    //now unlik the images from local upload folder
-    
-    imgArray.forEach((img) => {
-      fs.unlinkSync(img.path);
-    });
-
-    return fileUrls;
+    return result; // array of {secure_url, public_id}
   } catch (error) {
-    console.log(error);
-    imgArray.forEach((img) => {
-      fs.unlinkSync(img.path);
-    });
+    console.log('Cloud upload error:', error);
     return null;
   }
 };
