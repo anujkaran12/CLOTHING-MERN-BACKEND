@@ -23,8 +23,9 @@ mongoose
 app.use(express.json());
 app.use(
   cors({
-    origin: "*",
-    credentials: true,
+    origin: process.env.FRONTEND_URL,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 app.use(cookieParser());
