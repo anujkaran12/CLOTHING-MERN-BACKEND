@@ -17,9 +17,8 @@ const fetchWishlist = async (req, res) => {
           as: "wishlist",
         },
       },
-     
     ]);
-    
+
     return res.status(200).send(user[0].wishlist);
   } catch (error) {
     console.log(error);
@@ -55,6 +54,9 @@ const addToWishlist = async (req, res) => {
 const removeFromWishlist = async (req, res) => {
   try {
     const { productId } = req.body;
+    if (!productId) {
+      return res.status(401).send("Field is missing");
+    }
     const updatedUser = await userModel
       .findByIdAndUpdate(
         req.id,
