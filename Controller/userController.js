@@ -75,13 +75,10 @@ const updateProfile = async (req, res) => {
     const user_id = req.id;
     
     const { fullName, email, address, mobile } = req.body;
-    console.log("Fullname - ", fullName);
-    console.log("email - ", email);
-    console.log("address - ", address);
-    console.log("Mobile - ", mobile);
+  
 
-    let avatar = req.files;
-    console.log("Avatar - ",avatar)
+    let avatar = req.files.avatar;
+    
     let user = await userModel.findById(user_id);
 
     
