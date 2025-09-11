@@ -19,6 +19,7 @@ const productSchema = mongose.Schema(
     discountPrice: {
       type: Number,
       require: true,
+      default: 0,
     },
     category: {
       type: String,

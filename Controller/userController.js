@@ -80,9 +80,11 @@ const updateProfile = async (req, res) => {
     console.log("address - ", address);
     console.log("Mobile - ", mobile);
 
-    let avatar = req.file;
-
+    let avatar = req.files;
+    console.log("Avatar - ",avatar)
     let user = await userModel.findById(user_id);
+
+    
     if (avatar) {
       if (user.avatar?.public_id) {
         await cloudnaryDeleteImage(user.avatar.public_id);
