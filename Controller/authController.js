@@ -95,12 +95,60 @@ const sendVerificationCode = async (req, res) => {
     }
     const code = Math.floor(100000 + Math.random() * 900000);
     const html = `
-      <h2>Email Verification</h2>
-      <p>Your verification code is:</p>
-      <h1 style="color:#4CAF50;">${code}</h1>
-      <p>This code is valid for 10 minutes.</p>
+    <div style="background: linear-gradient(135deg, #f0f4ff, #ffe1e1); padding: 30px 0; font-family: 'Helvetica Neue', Arial, sans-serif;">
+  
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;">
+    <tr>
+      <td align="center">
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="500" style="background-color: #ffffff; border-radius: 8px; padding: 15px 30px; box-shadow: 0 2px 12px rgba(0,0,0,0.1); text-align: center;">
+          
+          <tr>
+            <td style="padding-bottom: 20px;">
+              <img src=${process.env.PROJECT_LOGO_WHITE_BACKGROUND} alt="Wild Stitch Logo" width="65" style="display: block; margin: auto;">
+            </td>
+          </tr>
+
+          <tr>
+            <td style="font-size: 18px; font-weight: 500; padding-bottom: 15px; color: #333;">
+              Verify Your Email Address
+            </td>
+          </tr>
+
+          <tr>
+            <td style="display: inline-block; background-color: #f2f2f2; padding: 18px 30px; border-radius: 6px; font-size: 28px; font-weight: 500; color: #000; letter-spacing: 2px; margin-bottom: 25px;">
+              ${code}
+            </td>
+          </tr>
+
+          <tr>
+            <td style="font-size: 14px; color: #555; line-height: 1.6; padding-bottom: 25px;">
+              You're one step away from unlocking the best in fashion. Use the code above to verify your email and start exploring Wild Stitch’s latest collections.
+            </td>
+          </tr>
+
+          <tr>
+            <td style="font-size: 13px; color: #777; line-height: 1.5;">
+              This code will expire in 10 minutes. If you did not request this, simply ignore this email.
+            </td>
+          </tr>
+
+        </table>
+
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="500" style="margin-top: 20px;">
+          <tr>
+            <td style="font-size: 12px; text-align: center; color: #aaa;">
+              &copy; 2025 Wild Stitch. All rights reserved.
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  
+</div>
+
     `;
-    const subject = "Your Verification Code";
+    const subject = "Your Email Verification Code";
     const response = await sendMail(email, subject, html);
     if (response) {
       return res.status(200).send({ verificationCode: code });
@@ -174,20 +222,76 @@ const forgotPassword = async (req, res) => {
       process.env.FRONTEND_URL
     }/reset-password?token=${resetToken}&email=${encodeURIComponent(email)}`;
 
-    const subject = "Your reset password link";
+    const subject = "Your Reset Password Link";
 
-    const html = `<div style="font-family:Inter,system-ui,Segoe UI,Roboto,Arial">
-      <h2>Reset your password</h2>
-      <p>We received a request to reset your password. This link is valid for 15 minutes.</p>
-      <p>
-        <a href="${resetUrl}" style="display:inline-block;padding:12px 18px;border-radius:8px;background:#111;color:#fff;text-decoration:none">
-          Reset Password
-        </a>
-      </p>
-      <p>If the button doesn't work, copy and paste this URL into your browser:</p>
-      <p style="word-break:break-all">${resetUrl}</p>
-      <p>If you didn’t request this, you can ignore this email.</p>
-    </div>`;
+    const html = `<div style="background: linear-gradient(135deg, #f0f4ff, #ffe1e1); padding: 30px 0; font-family: 'Helvetica Neue', Arial, sans-serif;">
+  
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;">
+    <tr>
+      <td align="center">
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="500" style="background-color: #ffffff; border-radius: 8px; padding: 15px 30px; box-shadow: 0 2px 12px rgba(0,0,0,0.1); text-align: center;">
+          
+          <tr>
+            <td style="padding-bottom: 20px;">
+              <img src=${process.env.PROJECT_LOGO_WHITE_BACKGROUND} alt="Wild Stitch Logo" width="65" style="display: block; margin: auto;">
+            </td>
+          </tr>
+
+          <tr>
+            <td style="font-size: 18px; font-weight: 500; padding-bottom: 15px; color: #333;">
+              Reset Your Password
+            </td>
+          </tr>
+
+          <tr>
+            <td style="font-size: 14px; color: #555; line-height: 1.6; padding-bottom: 25px;">
+              We received a request to reset your password. Click the button below to securely set a new password for your Wild Stitch account.
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding-bottom: 25px;">
+              <a href=${resetUrl} style="background-color: #000000; color: #ffffff; text-decoration: none; padding: 12px 28px; border-radius: 25px; font-size: 15px; font-weight: 500; display: inline-block;">
+                Reset Password
+              </a>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="font-size: 13px; color: #777; line-height: 1.5; padding-bottom: 15px;">
+              If the button above doesn’t work, copy and paste the following link into your browser:
+            </td>
+          </tr>
+
+          <tr>
+            <td style="font-size: 13px; color: #555; word-break: break-all; padding-bottom: 25px;">
+              <p style="color: #0000EE; text-decoration: underline;">
+               ${resetUrl}
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="font-size: 13px; color: #777; line-height: 1.5;">
+              This link will expire in 10 minutes. If you did not request this, simply ignore this email.
+            </td>
+          </tr>
+
+        </table>
+
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="500" style="margin-top: 20px;">
+          <tr>
+            <td style="font-size: 12px; text-align: center; color: #aaa;">
+              &copy; 2025 Wild Stitch. All rights reserved.
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  
+</div>
+`;
 
     await sendMail(email, subject, html);
     return res

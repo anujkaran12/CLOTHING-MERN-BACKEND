@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
 
 const sendMail = async (to, subject, html) => {
   const mailOptions = {
-    from: `"WEARLOOM" <${process.env.GMAIL_USER}>`,
+    from: `${process.env.PROJECT_NAME} <${process.env.GMAIL_USER}>`,
     to,
     subject,
     html,
