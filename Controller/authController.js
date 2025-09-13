@@ -95,7 +95,7 @@ const sendVerificationCode = async (req, res) => {
     }
     const code = Math.floor(100000 + Math.random() * 900000);
     const html = `
-    <div style="background: linear-gradient(135deg, #f0f4ff, #ffe1e1); padding: 30px 0; font-family: 'Helvetica Neue', Arial, sans-serif;">
+    <div style="background: linear-gradient(135deg, #f0f4ff, #ffe1e1); padding: 20px 15px 0; font-family: 'Helvetica Neue', Arial, sans-serif;">
   
   <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;">
     <tr>
@@ -224,7 +224,7 @@ const forgotPassword = async (req, res) => {
 
     const subject = "Your Reset Password Link";
 
-    const html = `<div style="background: linear-gradient(135deg, #f0f4ff, #ffe1e1); padding: 30px 0; font-family: 'Helvetica Neue', Arial, sans-serif;">
+    const html = `<div style="background: linear-gradient(135deg, #f0f4ff, #ffe1e1); padding: 20px 15px; font-family: 'Helvetica Neue', Arial, sans-serif;">
   
   <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;">
     <tr>
